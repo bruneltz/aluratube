@@ -10,27 +10,23 @@ function HomePage() {
     const [valorDoFiltro, setValorDoFiltro] = React.useState("");
     const [playlists, setPlaylists] = React.useState({});
 
-   // Se não fosse useEffect, o código ficara em looping, pois o useState renderizaria a tela de novo
-    React.useEffect(() => {
-       console.log("useEffect");
-     service
-            .getAllVideos()
-            .then((dados) => {
-                console.log(dados.data);
-                // Forma imutavel
-                const novasPlaylists = {};
-                    dados.data.forEach((video) => {
-                     if (!novasPlaylists[video.playlist]) novasPlaylists[video.playlist] = [];
-                     novasPlaylists[video.playlist] = [
-                         video,
-                         ...novasPlaylists[video.playlist],
-                     ];
-                 });
+    //React.useEffect(() => {
+        //service
+            //.getAllVideos()
+            //.then((dados) => {
+             //   console.log(dados.data);
+             //   const novasPlaylists = {};
+                //dados.data.forEach((video) => {
+                //    if (!novasPlaylists[video.playlist]) novasPlaylists[video.playlist] = [];
+                //    novasPlaylists[video.playlist] = [
+                //        video,
+                //        ...novasPlaylists[video.playlist],
+                //    ];
+                //});
 
-                setPlaylists(novasPlaylists);
-            });
-    // O array vazio indica que nenhuma variável irá controlar para executar de novo
-    }, []);
+              //setPlaylists(novasPlaylists);
+            //});
+    //}, []);
 
     return (
         <>
@@ -38,12 +34,11 @@ function HomePage() {
                 display: "flex",
                 flexDirection: "column",
                 flex: 1,
-                // backgroundColor: "red",
             }}>
                 {/* Prop Drilling */}
                 <Menu valorDoFiltro={valorDoFiltro} setValorDoFiltro={setValorDoFiltro} />
                 <Header></Header>
-                <Timeline searchValue={valorDoFiltro} playlists={playlists}></Timeline>
+                <Timeline searchValue={valorDoFiltro} playlists={config.playlists}></Timeline>
             </div>
         </>
     );
@@ -51,7 +46,6 @@ function HomePage() {
 
 export default HomePage;
 
-// styled. -> tag base
 const StyledHeader = styled.div`
 background-color: ${({ theme }) => theme.backgroundLevel1};
   img {
@@ -92,8 +86,6 @@ function Header() {
 function Timeline({ searchValue, ...props }) {
     const playlistNames = Object.keys(props.playlists)
 
-    //Statement
-    //Retorno por expressão
     return (
         <StyledTimeline>
             {playlistNames.map(function (playlistName) {
